@@ -34,18 +34,30 @@ main(int argc, char *argv[]) {
            break;
       }
    }
-   if(n <= 0){
-      printf("cantidad de discos <= 0");
-   }
-   if(d <= 0){
-      printf("ancho de disco <= 0");
-   }
+   // Deje esto comentado por que queda la escoba con los fork()
+
+  //  if(n <= 0){
+  //     printf("cantidad de discos <= 0");
+  //  }
+  //  if(d <= 0){
+  //     printf("ancho de disco <= 0");
+  //  }
    //Se verifica que el archivo de entrada exista
-    FILE *f=fopen(inputFile,"r");
-    if(f == NULL){ //Si no se pudo abrir
-        printf("El archivo de entrada no existe.\n");
-        return 0;
+    // FILE *f=fopen(inputFile,"r");
+    // if(f == NULL){ //Si no se pudo abrir
+    //     printf("El archivo de entrada no existe.\n");
+    //     // return 0;
+    // }
+    // fclose(f); //Se cierra el archivo de entrada
+    // Crea cada proceso hijo con un rango determinado
+    int rangomin = 0, rangomax = 0;
+    int pid = 10;
+    for(int i = 0;i < n;i++){
+      if(pid > 0){
+        pid = fork();
+        rangomin +=d;
+        rangomax +=d-1;
+        printf("a %d %d %d \n",pid,rangomin,rangomax);
+      }
     }
-    fclose(f); //Se cierra el archivo de entrada
-    
 }
