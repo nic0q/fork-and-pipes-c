@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "*.rmd": "markdown",
+    "iostream": "cpp",
+    "new": "cpp",
+    "funciones.h": "c"
+  }
+}

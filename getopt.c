@@ -41,11 +41,11 @@ main(int argc, char *argv[]) {
       printf("ancho de disco <= 0");
    }
    //Se verifica que el archivo de entrada exista
-    FILE *f=fopen(inputFile,"r");
-    if(f == NULL){ //Si no se pudo abrir
-        printf("El archivo de entrada no existe.\n");
-        return 0;
-    }
-    fclose(f); //Se cierra el archivo de entrada
-    //Verificar que la cantidad de lineas sea valida
+   FILE *f = fopen(inputFile,"r");
+   if(f == NULL){ //Si no se pudo abrir
+     printf("El archivo de entrada no existe.\n");
+   }
+   printf("mi f %d",&f);
+   fclose(f); //Se cierra el archivo de entrada
+   //Verificar que la cantidad de lineas sea valida
 }
