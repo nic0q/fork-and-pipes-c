@@ -27,6 +27,9 @@ int main(int argc, char *argv[]) {
   char *inputFile = NULL;
   char *outputFile = NULL;
   int option;
+  pid_t pid;
+  float cord_v, cord_u, sound, part_r, part_i;
+  int sonNumber = 0;
   while((option = getopt(argc, argv, "i:o:n:d:b")) != -1){ //get option from the getopt() method
     switch(option){
       case 'i': // nombre del archivo de entrada
@@ -53,6 +56,7 @@ int main(int argc, char *argv[]) {
         break;
      }
   }
+  // VALIDACIONES
   if(nProcesses <= 0){
      printf("Ingrese una cantidad de discos valida\n");
      return 0;
@@ -67,13 +71,43 @@ int main(int argc, char *argv[]) {
     return 0;
   }
   else{
-    // create the array of arrays
-    float **m = (float**)malloc(nProcesses * sizeof(float*)); // dynamic array "nProcess" size
-    for(int i = 0; i < nProcesses; i++){
-      m[i] = (float*)malloc(5 * sizeof(float)); // array 5 size [u,v,r,i,noise]
+    // CREACION DE PIPES
+    int writePipesArray[nProcesses][2];
+    int readPipesArray[nProcesses][2];
+  
+    for (int i = 0; i < nProcesses; i++){
+        pipe(writePipesArray[i]);
+        pipe(readPipesArray[i]);
     }
+    // CREACION DE HIJOS
+    while(sonNumber < nProcesses){
+      pid = fork();
+      if(pid == 0){
+        break;
+      }
+    }
+    // HIJO
+    if(pid == 0){
+      close(writePipesArray[sonNumber][READ]); //Se cierra el lado de Lectura, ya que no leera
+      dup2(writePipesArray[sonNumber][WRITE], STDOUT_FILENO); //Se genera una copia del pipe al stdout
+      close(writePipesArray[sonNumber][WRITE]);
+
+      close(readPipesArray[sonNumber][WRITE]); //Se cierra el lado de Escritura, ya que no escribira
+      dup2(readPipesArray[sonNumber][READ], STDIN_FILENO); //Se genera una copia del pipe al stdout
+      close(readPipesArray[sonNumber][READ]);
+      //char* asd[]={"vis", "pipeflag", NULL};
+      //execve("./","vis",asd);
+    }
+    // PADRE ONLY
+    else{
+    // Tendremos Nprocesses Pipes
+    // lECTURA DEL ARCHIVO
+    for(int i = 0; i < nProcesses; i++){
+      close(readPipesArray[i][READ]);
+    }
+
     char buffer[1024];
-    float vis[5]; // array 5 size [u,v,r,i,noise]
+    float vis[6]; // array 5 size [u,v,r,i,noise]
     int row = 0,col = 0;
     while (fgets(buffer,1024,f)) {
       col = 0;
@@ -98,14 +132,38 @@ int main(int argc, char *argv[]) {
         value = strtok(NULL, ",");
         col++;
         row++;
-
       }
+      cord_u = vis[0];
+      cord_v = vis[1];
+      part_r = vis[2];
+      part_i = vis[3];
+      sound = vis[4];
       float distance = originDistance(vis[0],vis[1]);
       int index = getIndexProccess(nProcesses,discWidth,distance);
-      printf("%f %d\n",distance,index);
+      //printf("%f %f %f %f %f %f\n",vis[0],vis[1],vis[2],vis[3],vis[4],vis[5]);
+      write(readPipesArray[index][WRITE], &cord_u, sizeof(cord_u));
+      write(readPipesArray[index][WRITE], &cord_v, sizeof(cord_v));
+      write(readPipesArray[index][WRITE], &part_r, sizeof(part_r));
+      write(readPipesArray[index][WRITE], &part_i, sizeof(part_i));
+      write(readPipesArray[index][WRITE], &sound, sizeof(sound));
     }
     fclose(f);
-  }
+    cord_u = 0.0;
+    cord_v = 0.0;
+    part_r = 0.0;
+    part_i = 0.0;
+    sound = 0.0;
+    // FIN
+    for(int i = 0; i < nProcesses; i++){
+      write(readPipesArray[i][WRITE], &cord_u, sizeof(cord_u));
+      write(readPipesArray[i][WRITE], &cord_v, sizeof(cord_v));
+      write(readPipesArray[i][WRITE], &part_r, sizeof(part_r));
+      write(readPipesArray[i][WRITE], &part_i, sizeof(part_i));
+      write(readPipesArray[i][WRITE], &sound, sizeof(sound));
+    }
+    }
+
+
   // 4 discos - 100 por cada disco
   // Crea cada proceso hijo con un rango determinado
   // int rangomin = 0, rangomax = 0;
@@ -121,4 +179,5 @@ int main(int argc, char *argv[]) {
 
   //   }
   // }
+  }
 }

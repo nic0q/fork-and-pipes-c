@@ -1,4 +1,6 @@
 #include <math.h>
 #include <stdio.h>
 
-float originDistance(int u, int v);
+float originDistance(float u, float v);
+
+float realAverage(int r, int N);
