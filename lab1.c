@@ -3,6 +3,9 @@
 #include <stdbool.h>
 #include "funciones.h"
 #include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+
 #define READ 0
 #define WRITE 1
 
@@ -85,9 +88,11 @@ int main(int argc, char *argv[]) {
       if(pid == 0){
         break;
       }
+      sonNumber +=1;
     }
     // HIJO
     if(pid == 0){
+      printf("test\n");
       close(writePipesArray[sonNumber][READ]); //Se cierra el lado de Lectura, ya que no leera
       dup2(writePipesArray[sonNumber][WRITE], STDOUT_FILENO); //Se genera una copia del pipe al stdout
       close(writePipesArray[sonNumber][WRITE]);
