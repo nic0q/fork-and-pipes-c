@@ -3,6 +3,10 @@
     "*.rmd": "markdown",
     "iostream": "cpp",
     "new": "cpp",
-    "funciones.h": "c"
-  }
+    "funciones.h": "c",
+    "unistd.h": "c",
+    "stdbool.h": "c",
+    "stdlib.h": "c"
+  },
+  "C_Cpp.errorSquiggles": "Disabled"
 }
