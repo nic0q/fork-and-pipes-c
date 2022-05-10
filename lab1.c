@@ -6,40 +6,16 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-
 #define READ 0
 #define WRITE 1
 
-int getIndexProccess(int nProcesses, int discWidth, float distance)
-{
-  int j = discWidth;
-  if (distance >= (nProcesses - 1) * discWidth)
-  {
-    return nProcesses - 1;
-  }
-  else
-  {
-    for (int i = 0; i < nProcesses; i++)
-    {
-      if (i * discWidth <= distance && distance < j)
-      {
-        return i;
-      }
-      j = j + discWidth;
-    }
-  }
-}
-
 int main(int argc, char *argv[])
 {
-  int nProcesses = 0, discWidth = 0;
-  bool b = false;
-  char *inputFile = NULL;
-  char *outputFile = NULL;
-  int option;
-  pid_t pid;
+  int nProcesses = 0, discWidth = 0, option, IDchild = 0, cont = 0;
   float cord_v, cord_u, noise, part_r, part_i;
-  int IDchild = 0;
+  char *inputFile = NULL, *outputFile = NULL;
+  bool b = false;
+  pid_t pid;
   while ((option = getopt(argc, argv, "i:o:n:d:b")) != -1)
   { // get option from the getopt() method
     switch (option)
@@ -88,22 +64,19 @@ int main(int argc, char *argv[])
   else
   {
     float *estructuraFinal = malloc(sizeof(float) * nProcesses);
+    int fd[2], readPipesArray[nProcesses][2], writePipesArray[nProcesses][2], status;
+    float tre;
     for (int i = 0; i < nProcesses; i++)
     {
       estructuraFinal[i] = 0;
     }
-    // CREACION DE PIPES
-    int writePipesArray[nProcesses][2];
-    int readPipesArray[nProcesses][2];
-    int fd[2];
-    float tre;
+    // Creacion de Pipes
     for (int i = 0; i < nProcesses; i++)
     {
       pipe(writePipesArray[i]);
       pipe(readPipesArray[i]);
       pipe(fd);
     }
-    int status;
     while (IDchild < nProcesses)
     {
       pid = fork();
@@ -113,10 +86,9 @@ int main(int argc, char *argv[])
       }
       IDchild += 1;
     }
-    // HIJO
-    if (pid == 0)
+    if (pid == 0) // Proceso HIJO
     {
-      printf("test\n");
+      printf("Hijo ID: %d\n", IDchild);                     // for debugging
       close(writePipesArray[IDchild][READ]);                // Se cierra el lado de Lectura, ya que no leera
       dup2(writePipesArray[IDchild][WRITE], STDOUT_FILENO); // Se genera una copia del pipe al stdout
       close(writePipesArray[IDchild][WRITE]);
@@ -125,14 +97,14 @@ int main(int argc, char *argv[])
       dup2(readPipesArray[IDchild][READ], STDIN_FILENO); // Se genera una copia del pipe al stdout
       close(readPipesArray[IDchild][READ]);
 
-      // dup2(fd[WRITE], STDOUT_FILENO);
-      // close(fd[READ]); // no usamos lectura
       execl("./vis", "./vis", NULL);
+      perror("execl fallo");
+      exit(EXIT_FAILURE);
     }
-    // PADRE ONLY
-    else
+    else // Proceso PADRE
     {
-      char buffer[1024];
+      char buffer[10000];
+      int row = 0, col = 0;
       // Tendremos Nprocesses Pipes
       // lECTURA DEL ARCHIVO
       for (int i = 0; i < nProcesses; i++)
@@ -140,8 +112,7 @@ int main(int argc, char *argv[])
         close(readPipesArray[i][READ]);
       }
       float vis[5]; // array 5 size [u,v,r,i,noise]
-      int row = 0, col = 0;
-      while (fgets(buffer, 1024, f))
+      while (fgets(buffer, 10000, f))
       {
         col = 0;
         // Splitting the data
@@ -150,35 +121,32 @@ int main(int argc, char *argv[])
         {
           if (col == 0)
           {
-            sscanf(value, "%f", &vis[0]);
+            sscanf(value, "%f", &cord_u);
           }
           if (col == 1)
           {
-            sscanf(value, "%f", &vis[1]);
+            sscanf(value, "%f", &cord_v);
           }
           if (col == 2)
           {
-            sscanf(value, "%f", &vis[2]);
+            sscanf(value, "%f", &part_r);
           }
           if (col == 3)
           {
-            sscanf(value, "%f", &vis[3]);
+            sscanf(value, "%f", &part_i);
           }
           if (col == 4)
           {
-            sscanf(value, "%f", &vis[4]);
+            sscanf(value, "%f", &noise);
           }
           value = strtok(NULL, ",");
           col++;
           row++;
         }
-        cord_u = vis[0];
-        cord_v = vis[1];
-        part_r = vis[2];
-        part_i = vis[3];
-        noise = vis[4];
-        float distance = originDistance(vis[0], vis[1]);
+        float distance = originDistance(cord_u, cord_v);
         int index = getIndexProccess(nProcesses, discWidth, distance);
+        // printf("Linea: %d - Distancia al origen de %f pertenenciente al disco %d\n", cont, distance, index); // for debugging
+        cont += 1;
         write(readPipesArray[index][WRITE], &cord_u, sizeof(cord_u));
         write(readPipesArray[index][WRITE], &cord_v, sizeof(cord_v));
         write(readPipesArray[index][WRITE], &part_r, sizeof(part_r));
@@ -186,11 +154,7 @@ int main(int argc, char *argv[])
         write(readPipesArray[index][WRITE], &noise, sizeof(noise));
       }
       fclose(f);
-      cord_u = 0.0;
-      cord_v = 0.0;
-      part_r = 0.0;
-      part_i = 0.0;
-      noise = 0.0;
+      cord_u = 0.0, cord_v = 0.0, part_r = 0.0, part_i = 0.0, noise = 0.0;
       // FIN
       for (int i = 0; i < nProcesses; i++)
       {
@@ -200,9 +164,13 @@ int main(int argc, char *argv[])
         write(readPipesArray[i][WRITE], &part_i, sizeof(part_i));
         write(readPipesArray[i][WRITE], &noise, sizeof(noise));
       }
-      waitpid(pid, &status, 0);
+      waitpid(pid, &status, 0);              // se espera a los hijos
+      close(readPipesArray[IDchild][WRITE]); // se cierra la parte de escritura
+      for (int i = 0; i < nProcesses; i++)
+      {
+        read(writePipesArray[i][READ], &tre, sizeof(float)); // se leen los resultados de cada hijo
+        printf("%f\n", tre);
+      }
     }
-    read(writePipesArray[0][READ], &tre, sizeof(float));
-    printf("%f ", tre);
   }
 }
