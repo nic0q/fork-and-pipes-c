@@ -6,14 +6,13 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <ctype.h>
-#include "funciones.h"
+#include "funciones.h" // Dato perturbador, si se coloca el "funciones.h" antes de los include <> tira error
 #define READ 0
 #define WRITE 1
 
 int main(int argc, char *argv[])
 {
-  int nProcesses = 0, discWidth = 0, option, IDchild = 0, cont = 0;
-  float cord_v, cord_u, noise, part_r, part_i;
+  int nProcesses = 0, discWidth = 0, option, IDchild = 0;
   char *inputFile = NULL, *outputFile = NULL;
   bool b = false;
   float listaSol[5];
@@ -46,7 +45,7 @@ int main(int argc, char *argv[])
       break;
     }
   }
-  // VALIDACIONES
+  // Validaciones
   if (nProcesses <= 0)
   {
     printf("Ingrese una cantidad de discos valida\n");
@@ -59,21 +58,19 @@ int main(int argc, char *argv[])
   }
   FILE *f = fopen(inputFile, "r");
   if (f == NULL)
-  { // Si no se pudo abrir
+  { // Si no se pudo abrir el archivo de entrada
     printf("El archivo de entrada no existe.\n");
     return 0;
   }
   else
   {
     float *estructuraFinal = malloc(sizeof(float) * nProcesses);
-    int fd[2], readPipesArray[nProcesses][2], writePipesArray[nProcesses][2], status;
-    float tre;
+    int readPipesArray[nProcesses][2], writePipesArray[nProcesses][2], status;
     // Creacion de Pipes
     for (int i = 0; i < nProcesses; i++)
     {
       pipe(writePipesArray[i]);
       pipe(readPipesArray[i]);
-      pipe(fd);
     }
     // Arreglo de resultados
     // Reserva de memoria para el arreglo de resultados
@@ -104,8 +101,7 @@ int main(int argc, char *argv[])
     else // Proceso PADRE
     {
       char buffer[10000];
-      float vis[3]; // array 5 size [r,i,noise]
-      float u, v;
+      float u, v, vis[3]; // array 5 size [r,i,noise]
       int row = 0, col = 0;
       for (int i = 0; i < nProcesses; i++)
       {
@@ -113,7 +109,6 @@ int main(int argc, char *argv[])
       }
       while (fgets(buffer, 500, f) != NULL)
       {
-
         sscanf(buffer, "%f,%f,%f,%f,%f", &u, &v, &vis[0], &vis[1], &vis[2]);
         float oDistance = originDistance(u, v);
         int index = getIndexProccess(nProcesses, discWidth, oDistance);
