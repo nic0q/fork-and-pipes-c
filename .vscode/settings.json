@@ -6,7 +6,10 @@
     "funciones.h": "c",
     "unistd.h": "c",
     "stdbool.h": "c",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "types.h": "c",
+    "string.h": "c",
+    "stdio.h": "c"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }

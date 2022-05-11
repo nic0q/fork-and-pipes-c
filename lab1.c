@@ -1,11 +1,12 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdbool.h>
-#include "funciones.h"
-#include <stdlib.h>
-#include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <ctype.h>
+#include "funciones.h"
 #define READ 0
 #define WRITE 1
 
@@ -15,6 +16,7 @@ int main(int argc, char *argv[])
   float cord_v, cord_u, noise, part_r, part_i;
   char *inputFile = NULL, *outputFile = NULL;
   bool b = false;
+  float listaSol[5];
   pid_t pid;
   while ((option = getopt(argc, argv, "i:o:n:d:b")) != -1)
   { // get option from the getopt() method
@@ -66,10 +68,6 @@ int main(int argc, char *argv[])
     float *estructuraFinal = malloc(sizeof(float) * nProcesses);
     int fd[2], readPipesArray[nProcesses][2], writePipesArray[nProcesses][2], status;
     float tre;
-    for (int i = 0; i < nProcesses; i++)
-    {
-      estructuraFinal[i] = 0;
-    }
     // Creacion de Pipes
     for (int i = 0; i < nProcesses; i++)
     {
@@ -77,6 +75,8 @@ int main(int argc, char *argv[])
       pipe(readPipesArray[i]);
       pipe(fd);
     }
+    // Arreglo de resultados
+    // Reserva de memoria para el arreglo de resultados
     while (IDchild < nProcesses)
     {
       pid = fork();
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     }
     if (pid == 0) // Proceso HIJO
     {
-      printf("Hijo ID: %d\n", IDchild);                     // for debugging
+      // printf("Hijo ID: %d\n", IDchild);                     // for debugging
       close(writePipesArray[IDchild][READ]);                // Se cierra el lado de Lectura, ya que no leera
       dup2(writePipesArray[IDchild][WRITE], STDOUT_FILENO); // Se genera una copia del pipe al stdout
       close(writePipesArray[IDchild][WRITE]);
@@ -98,79 +98,40 @@ int main(int argc, char *argv[])
       close(readPipesArray[IDchild][READ]);
 
       execl("./vis", "./vis", NULL);
-      perror("execl fallo");
+      perror("error execl");
       exit(EXIT_FAILURE);
     }
     else // Proceso PADRE
     {
       char buffer[10000];
+      float vis[3]; // array 5 size [r,i,noise]
+      float u, v;
       int row = 0, col = 0;
-      // Tendremos Nprocesses Pipes
-      // lECTURA DEL ARCHIVO
       for (int i = 0; i < nProcesses; i++)
       {
         close(readPipesArray[i][READ]);
       }
-      float vis[5]; // array 5 size [u,v,r,i,noise]
-      while (fgets(buffer, 10000, f))
+      while (fgets(buffer, 500, f) != NULL)
       {
-        col = 0;
-        // Splitting the data
-        char *value = strtok(buffer, ",");
-        while (value)
-        {
-          if (col == 0)
-          {
-            sscanf(value, "%f", &cord_u);
-          }
-          if (col == 1)
-          {
-            sscanf(value, "%f", &cord_v);
-          }
-          if (col == 2)
-          {
-            sscanf(value, "%f", &part_r);
-          }
-          if (col == 3)
-          {
-            sscanf(value, "%f", &part_i);
-          }
-          if (col == 4)
-          {
-            sscanf(value, "%f", &noise);
-          }
-          value = strtok(NULL, ",");
-          col++;
-          row++;
-        }
-        float distance = originDistance(cord_u, cord_v);
-        int index = getIndexProccess(nProcesses, discWidth, distance);
-        // printf("Linea: %d - Distancia al origen de %f pertenenciente al disco %d\n", cont, distance, index); // for debugging
-        cont += 1;
-        write(readPipesArray[index][WRITE], &cord_u, sizeof(cord_u));
-        write(readPipesArray[index][WRITE], &cord_v, sizeof(cord_v));
-        write(readPipesArray[index][WRITE], &part_r, sizeof(part_r));
-        write(readPipesArray[index][WRITE], &part_i, sizeof(part_i));
-        write(readPipesArray[index][WRITE], &noise, sizeof(noise));
+
+        sscanf(buffer, "%f,%f,%f,%f,%f", &u, &v, &vis[0], &vis[1], &vis[2]);
+        float oDistance = originDistance(u, v);
+        int index = getIndexProccess(nProcesses, discWidth, oDistance);
+        write(readPipesArray[index][WRITE], &vis, sizeof(float) * 3);
       }
-      fclose(f);
-      cord_u = 0.0, cord_v = 0.0, part_r = 0.0, part_i = 0.0, noise = 0.0;
-      // FIN
-      for (int i = 0; i < nProcesses; i++)
-      {
-        write(readPipesArray[i][WRITE], &cord_u, sizeof(cord_u));
-        write(readPipesArray[i][WRITE], &cord_v, sizeof(cord_v));
-        write(readPipesArray[i][WRITE], &part_r, sizeof(part_r));
-        write(readPipesArray[i][WRITE], &part_i, sizeof(part_i));
-        write(readPipesArray[i][WRITE], &noise, sizeof(noise));
-      }
-      waitpid(pid, &status, 0);              // se espera a los hijos
-      close(readPipesArray[IDchild][WRITE]); // se cierra la parte de escritura
-      for (int i = 0; i < nProcesses; i++)
-      {
-        read(writePipesArray[i][READ], &tre, sizeof(float)); // se leen los resultados de cada hijo
-        printf("%f\n", tre);
-      }
+    }
+    fclose(f);
+    float stop[3];
+    stop[0] = 0; // mensaje de detenerse
+    for (int i = 0; i < nProcesses; i++)
+    {
+      write(readPipesArray[i][WRITE], &stop, sizeof(float) * 3);
+    }
+    for (int i = 0; i < nProcesses; i++)
+    {
+      read(writePipesArray[i][READ], &listaSol, sizeof(float) * 5); // se leen los resultados de cada hijo
+      printf("mediaR: %f mediaI: %f potencia: %f ruido: %f Nvisibilidades: %f", listaSol[0], listaSol[1], listaSol[2], listaSol[3], listaSol[4]);
+      printf("\n");
     }
   }
 }
