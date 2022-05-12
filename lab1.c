@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "funciones.h" // Dato perturbador, si se coloca el "funciones.h" antes de los include <> tira error
-#define READ 0
 #define WRITE 1
+#define READ 0
 
 int main(int argc, char *argv[])
 {
@@ -64,7 +64,6 @@ int main(int argc, char *argv[])
   }
   else
   {
-    float *estructuraFinal = malloc(sizeof(float) * nProcesses);
     int readPipesArray[nProcesses][2], writePipesArray[nProcesses][2], status;
     // Creacion de Pipes
     for (int i = 0; i < nProcesses; i++)
@@ -74,9 +73,11 @@ int main(int argc, char *argv[])
     }
     // Arreglo de resultados
     // Reserva de memoria para el arreglo de resultados
+    int arrPids[nProcesses]; // un array para guardar los pids
     while (IDchild < nProcesses)
     {
       pid = fork();
+      arrPids[IDchild] = pid;
       if (pid == 0)
       {
         break;
@@ -100,14 +101,14 @@ int main(int argc, char *argv[])
     }
     else // Proceso PADRE
     {
-      char buffer[10000];
-      float u, v, vis[3]; // array 5 size [r,i,noise]
+      char buffer[1000];
+      float u, v, vis[3]; // array 3 size [r,i,noise]
       int row = 0, col = 0;
       for (int i = 0; i < nProcesses; i++)
       {
         close(readPipesArray[i][READ]);
       }
-      while (fgets(buffer, 500, f) != NULL)
+      while (fgets(buffer, 1000, f) != NULL)
       {
         sscanf(buffer, "%f,%f,%f,%f,%f", &u, &v, &vis[0], &vis[1], &vis[2]);
         float oDistance = originDistance(u, v);
@@ -116,17 +117,20 @@ int main(int argc, char *argv[])
       }
     }
     fclose(f);
-    float stop[3];
-    stop[0] = 0; // mensaje de detenerse
+    float stopMessage[3] = {0, 0, 0}; // Mensaje para detenerse
     for (int i = 0; i < nProcesses; i++)
     {
-      write(readPipesArray[i][WRITE], &stop, sizeof(float) * 3);
+      write(readPipesArray[i][WRITE], &stopMessage, sizeof(float) * 3);
     }
     for (int i = 0; i < nProcesses; i++)
     {
       read(writePipesArray[i][READ], &listaSol, sizeof(float) * 5); // se leen los resultados de cada hijo
-      printf("mediaR: %f mediaI: %f potencia: %f ruido: %f Nvisibilidades: %f", listaSol[0], listaSol[1], listaSol[2], listaSol[3], listaSol[4]);
-      printf("\n");
+      // printf("mediaR: %f mediaI: %f potencia: %f ruido: %f Nvisibilidades: %f\n", listaSol[0], listaSol[1], listaSol[2], listaSol[3], listaSol[4]);
+      if (b)
+      {
+        int nVis = listaSol[4];
+        printf("Soy el hijo de pid %d, procesé %d visibilidades\n", arrPids[i], nVis);
+      }
     }
   }
 }
