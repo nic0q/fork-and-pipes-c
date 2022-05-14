@@ -3,9 +3,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <math.h>
-int main()
-{
-  // Se leen y almacenan los datos recibidos del padre
+
+int main(){
   float buffer[3], cumPart_r = 0, cumPart_i = 0, cumNoise = 0, potencia = 0, n = 0;
   while (1==1){
     read(STDIN_FILENO, &buffer, sizeof(float) * 3);         // Se lee el array[3] enviado por el padre que contiene {parteReal, parteImaginaria, Ruido}

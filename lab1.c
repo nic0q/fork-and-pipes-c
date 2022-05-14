@@ -19,7 +19,6 @@ int main(int argc, char *argv[]){
       inputFile = optarg;
       break;
     case 'o': // nombre del archivo de salida
-      printf("outputFile: %s\n", optarg);
       outputFile = optarg;
       break;
     case 'n': // numero de discos
@@ -32,7 +31,9 @@ int main(int argc, char *argv[]){
       b = 1;
       break;
     case '?':
-      break;
+      exit(0);
+    default: //En caso que no se haya ingresado alguna flag obligatoria, se aborta la ejecucion
+      abort();    
     }
   }
   // Validaciones / Lectura del archivo
@@ -103,5 +104,6 @@ int main(int argc, char *argv[]){
       arrayMaster[i][4] = listaSol[4];
     }
     escribirSalida(nProcesses, outputFile, arrayMaster);
+
   }
 }
