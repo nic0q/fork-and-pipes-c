@@ -21,6 +21,7 @@ int main()
     }
     else
     {
+      //cumPart_r = sumatoria(cumPart_r, buffer[0])
       cumPart_r += buffer[0];
       cumPart_i += buffer[1];
       cumNoise += buffer[2];

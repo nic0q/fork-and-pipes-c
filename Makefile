@@ -1,4 +1,4 @@
-all: lab1
+all: lab1 vis
 
 lab1: lab1.c funciones.o
 	gcc -o lab1 lab1.c funciones.o -lm

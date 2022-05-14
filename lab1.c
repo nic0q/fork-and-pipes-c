@@ -125,11 +125,23 @@ int main(int argc, char *argv[])
     for (int i = 0; i < nProcesses; i++)
     {
       read(writePipesArray[i][READ], &listaSol, sizeof(float) * 5); // se leen los resultados de cada hijo
-      // printf("mediaR: %f mediaI: %f potencia: %f ruido: %f Nvisibilidades: %f\n", listaSol[0], listaSol[1], listaSol[2], listaSol[3], listaSol[4]);
+      printf("mediaR: %f mediaI: %f potencia: %f ruido: %f Nvisibilidades: %f\n", listaSol[0], listaSol[1], listaSol[2], listaSol[3], listaSol[4]);
       if (b)
       {
         int nVis = listaSol[4];
         printf("Soy el hijo de pid %d, procesé %d visibilidades\n", arrPids[i], nVis);
+      }
+      else
+      {
+        escribirSalida(i+1, listaSol[0], listaSol[1], listaSol[2], listaSol[3], outputFile);
+        /*
+        salida = fopen(outputFile, "a");
+        fprintf(salida, "Disco: %i\n", i+1);
+        fprintf(salida, "Medial real: %f\n", listaSol[0]);
+        fprintf(salida, "Media imaginaria: %f\n", listaSol[1]);
+        fprintf(salida, "Potencia: %f\n", listaSol[2]);
+        fprintf(salida, "Ruido total: %f\n", listaSol[3]);
+        */
       }
     }
   }
