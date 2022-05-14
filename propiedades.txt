@@ -9,7 +9,12 @@ Media imaginaria: -0.197419
 Potencia: 4.751182
 Ruido: 202.568359
 Disco: 3
-Media real: 0.002717
-Media imaginaria: -0.008388
-Potencia: 35.028774
-Ruido: 1307.825073
+Media real: 0.039500
+Media imaginaria: -0.000669
+Potencia: 11.150599
+Ruido: 508.641541
+Disco: 4
+Media real: -0.019080
+Media imaginaria: -0.012962
+Potencia: 23.878174
+Ruido: 799.183350
