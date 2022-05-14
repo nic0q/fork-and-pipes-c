@@ -28,11 +28,14 @@ float sumatoria(float n1, float n2){
   return n1 + n2;
 }
 
-void escribirSalida(int i, float mr, float mi, float pot, float ruido, char* b){
-  FILE* salida = fopen(b, "a");
-  fprintf(salida, "Disco: %i\n", i);
-  fprintf(salida, "Medial real: %f\n", mr);
-  fprintf(salida, "Media imaginaria: %f\n", mi);
-  fprintf(salida, "Potencia: %f\n", pot);
-  fprintf(salida, "Ruido total: %f\n", ruido);
+void escribirSalida(int nProcesses, char* b, float datos[nProcesses][5]){
+  FILE* salida = fopen(b, "w");
+  for(int i = 0; i < nProcesses; i++){
+    fprintf(salida, "Disco: %i\n", i+1);
+    fprintf(salida, "Media real: %f\n", datos[i][0]);
+    fprintf(salida, "Media imaginaria: %f\n", datos[i][1]);
+    fprintf(salida, "Potencia: %f\n", datos[i][2]);
+    fprintf(salida, "Ruido: %f\n", datos[i][3]);
+  }
+  fclose(salida);
 }
