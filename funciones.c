@@ -78,7 +78,7 @@ void escribirSalida(int nProcesses, char *outputFile, float datos[nProcesses][5]
   FILE *salida = fopen(outputFile, "w");
   for (int i = 0; i < nProcesses; i++){
     if (i != 0){fprintf(salida, "\n");}
-      fprintf(salida, "Disco: %i\nMedia real: %f\nMedia imaginaria: %f\nPotencia: %f\nRuido: %f",
+      fprintf(salida, "Disco %i:\nMedia real: %f\nMedia imaginaria: %f\nPotencia: %f\nRuido total: %f",
       i + 1,datos[i][0],datos[i][1],datos[i][2],datos[i][3]);
   }
   fclose(salida);
