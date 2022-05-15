@@ -55,7 +55,6 @@ float media (float sum, float n){
 // Salida: Un archivo abierto exitosamente
 // Descripcion: Funcion que intenta abrir el archivo, si pudo abrirlo retorna el archivo,
 // si no puede retorna 0
-
 FILE * leerArchivo(char* nombreArchivo){
   //Se inicializa archivo como null
   FILE* archivo = NULL;
@@ -79,11 +78,8 @@ void escribirSalida(int nProcesses, char *outputFile, float datos[nProcesses][5]
   FILE *salida = fopen(outputFile, "w");
   for (int i = 0; i < nProcesses; i++){
     if (i != 0){fprintf(salida, "\n");}
-    fprintf(salida, "Disco: %i\n", i + 1);
-    fprintf(salida, "Media real: %f\n", datos[i][0]);
-    fprintf(salida, "Media imaginaria: %f\n", datos[i][1]);
-    fprintf(salida, "Potencia: %f\n", datos[i][2]);
-    fprintf(salida, "Ruido: %f", datos[i][3]);
+      fprintf(salida, "Disco: %i\nMedia real: %f\nMedia imaginaria: %f\nPotencia: %f\nRuido: %f",
+      i + 1,datos[i][0],datos[i][1],datos[i][2],datos[i][3]);
   }
   fclose(salida);
 }

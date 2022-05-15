@@ -10,7 +10,7 @@ vis: vis.c funciones.o
 	gcc -o vis vis.c funciones.o -lm
 
 clean:
-	rm -f *.o lab1 vis
+	rm -f *.o lab1 vis propiedades.txt
 
 run:	# Test
 	./lab1 -i test100.csv -o propiedades.txt -n 4 -d 100 -b
