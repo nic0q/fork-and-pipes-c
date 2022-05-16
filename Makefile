@@ -13,4 +13,4 @@ clean:
 	rm -f *.o lab1 vis propiedades.txt
 
 run:	# Test
-	./lab1 -i test10000.csv -o propiedades.txt -n 4 -d 100 -b
+	./lab1 -i test100.csv -o propiedades.txt -n 4 -d 100 -b

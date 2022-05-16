@@ -41,8 +41,7 @@ int main(int argc, char *argv[]){
   FILE *f = leerArchivo(inputFile);
   if (n <= 0){ printf("Ingrese una cantidad de discos valida\n"); exit(0);}
   if (discWidth <= 0){ printf("Ingrese un ancho de disco valido\n"); exit(0);}
-
-  int readPipesArray[n][2], writePipesArray[n][2], arrPids[n], status;
+  int readPipesArray[n][2], writePipesArray[n][2], arrPids[n];
   // Creacion de Pipes, se crean arreglos de pipes de escritura y lectura. En palabras simples
   // cada hijo tendra dos pipes. Uno donde el hijo leera los datos enviados por el padre y 
   // otro donde el hijo escribira los calculos realizados para que puedan ser leidos por el padre
@@ -62,23 +61,19 @@ int main(int argc, char *argv[]){
     }
     IDchild += 1;
   }
-
   if (pid == 0){ // Proceso HIJO
     close(writePipesArray[IDchild][READ]);                // Se cierra el lado de Lectura, ya que no leera
     dup2(writePipesArray[IDchild][WRITE], STDOUT_FILENO); // Se genera una copia del pipe al stdout
     close(writePipesArray[IDchild][WRITE]);               // Debido a lo anterior se cierra el pipe de escritura
 
-    close(readPipesArray[IDchild][WRITE]);             // Se cierra el lado de Escritura, ya que no escribira
-    dup2(readPipesArray[IDchild][READ], STDIN_FILENO); // Se genera una copia del pipe al stdout
-    close(readPipesArray[IDchild][READ]);              // Debido a lo anterior se cierra el pipe de lectura
+    close(readPipesArray[IDchild][WRITE]);                // Se cierra el lado de Escritura, ya que no escribira
+    dup2(readPipesArray[IDchild][READ], STDIN_FILENO);    // Se genera una copia del pipe al stdout
+    close(readPipesArray[IDchild][READ]);                 // Debido a lo anterior se cierra el pipe de lectura
 
-    // Se utiliza execl para llamar al archivo vis
-    execl("vis", "vis", NULL);
-    // Si lo anterior falla, los hijos finalizan su proceso prematuramente
-    perror("error execl");
+    execl("vis", "vis", NULL);  // Se utiliza execl para llamar al archivo vis
+    perror("error execl");      // Si lo anterior falla, los hijos finalizan su proceso prematuramente
     exit(EXIT_FAILURE);
   }
-
   else{ // Proceso PADRE
     float u, v, vis[3], listaSol[5], arrayMaster[n][5], stopMessage[3] = {0, 0, 0};
     int row = 0, col = 0;
@@ -87,7 +82,7 @@ int main(int argc, char *argv[]){
       close(readPipesArray[i][READ]); // Se cierra el lado de lectura de los pipes de lectura
     }
     while (fgets(buffer, 1000, f) != NULL){
-      sscanf(buffer, "%f,%f,%f,%f,%f", &u, &v, &vis[0], &vis[1], &vis[2]);   // array 3 size [r,i,noise]
+      sscanf(buffer, "%f,%f,%f,%f,%f", &u, &v, &vis[0], &vis[1], &vis[2]);   // vis = {parteR, parteI, ruido}
       float oDistance = originDistance(u, v); // Se calcula la distancia de la visibilidad al origen
       int index = getIndexProccess(n, discWidth, oDistance); // Se determina a que disco pertenece la visibilidad
       write(readPipesArray[index][WRITE], &vis, sizeof(float) * 3); // Se envia la informacion al hijo

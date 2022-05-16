@@ -8,7 +8,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
  # Este programa fue construido para i386-pc-mingw32
  
 
-# Base de datos del Make, mostrada en Sun May 15 10:53:24 2022
+# Base de datos del Make, mostrada en Sun May 15 17:09:14 2022
 
 # Variables
 
@@ -49,7 +49,8 @@ FPS_BROWSER_USER_PROFILE_STRING = Default
 # entorno
 TMP = C:\Users\nicol\AppData\Local\Temp
 # entorno
-VSCODE_VERBOSE_LOGGING = true
+VSCODE_VERBOSE_LO 
+GGING = true
 # entorno
 PROGRAMW6432 = C:\Program Files
 # entorno
@@ -57,7 +58,7 @@ NVM_SYMLINK = C:\Program Files\nodejs
 # entorno
 PROGRAMDATA = C:\ProgramData
 # entorno
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-1b149827-cba9-4b28-b92a-00d0d8c2cc4d-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-71357bac-d681-4ec3-8af3-4c20a7782ee4-sock
 # entorno
 VSCODE_CWD = C:\Users\nicol\AppData\Local\Programs\Microsoft VS Code
 # entorno
@@ -107,7 +108,7 @@ VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # entorno
 VSCODE_CODE_CACHE_PATH = C:\Users\nicol\AppData\Roaming\Code\CachedData\da15b6fd3ef856477bf6f4fb29ba1b7af717770d
 # entorno
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # entorno
 COMMONPROGRAMFILES = C:\Program Files (x86)\Common Files
 # entorno
@@ -185,8 +186,7 @@ RTOOLS42_HOME = C:\rtools42
 # autom�tica/o
 ^F = $(notdir $^)
 # por defecto
-SUFFIXES 
- := 
+SUFFIXES := 
 # entorno
 SYSTEMDRIVE = C:
 # entorno
@@ -219,7 +219,7 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-U60L63I
 # C:\Users\nicol\AppData\Local\Programs\Python\Python310 (llave C:/Users/nicol/AppData/Local/Programs/Python/Python310, mtime 1647993768): 18 archivos, no imposibilidades.
 # C:\WINDOWS\System32\WindowsPowerShell\v1.0\ (llave C:/WINDOWS/System32/WindowsPowerShell/v1.0/, mtime 1643111564): 32 archivos, no imposibilidades.
 # C:\WINDOWS\System32\Wbem (llave C:/WINDOWS/System32/Wbem, mtime 1646968088): 156 archivos, no imposibilidades.
-# . (llave c:/Users/nicol/OneDrive - usach.cl/Universidad/Nivel5/SO/labgit/Lab1-SISTOPE, mtime 1652626385): 15 archivos, no imposibilidades.
+# . (llave c:/Users/nicol/OneDrive - usach.cl/Universidad/Nivel5/SO/labgit/Lab1-SISTOPE, mtime 1652648828): 15 archivos, no imposibilidades.
 # C:\ProgramData\chocolatey\bin (llave C:/ProgramData/chocolatey/bin, mtime 1646881141): 15 archivos, no imposibilidades.
 # C:\Program Files\nodejs\ (llave C:/Program Files/nodejs/, mtime 1646707842): 13 archivos, no imposibilidades.
 # C:\Users\nicol\AppData\Local\Programs\Microsoft VS Code\bin (llave C:/Users/nicol/AppData/Local/Programs/Microsoft VS Code/bin, mtime 1652204088): 4 archivos, no imposibilidades.
@@ -248,7 +248,8 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-U60L63I
 # Archivos
 
 all: lab1 vis
-#  Objetivo de l�nea de instrucciones.
+#  Objetivo de l�nea de instrucc 
+iones.
 #  La b�squeda de reglas impl�citas ha sido efectuada.
 #  El archivo no existe.
 #  El archivo ha sido actualizado.
@@ -265,7 +266,7 @@ all: lab1 vis
 # No es un objetivo:
 funciones.c:
 #  La b�squeda de reglas impl�citas ha sido efectuada.
-#  �ltima modificaci�n 2022-05-15 10:52:31
+#  �ltima modificaci�n 2022-05-15 17:05:02
 #  El archivo ha sido actualizado.
 #  Actualizado con �xito.
 # estad�sticas del conjunto de variables de la tabla de hash:
@@ -274,7 +275,7 @@ funciones.c:
 # No es un objetivo:
 lab1.c:
 #  La b�squeda de reglas impl�citas ha sido efectuada.
-#  �ltima modificaci�n 2022-05-15 10:52:31
+#  �ltima modificaci�n 2022-05-15 17:05:09
 #  El archivo ha sido actualizado.
 #  Actualizado con �xito.
 # estad�sticas del conjunto de variables de la tabla de hash:
@@ -283,7 +284,7 @@ lab1.c:
 # No es un objetivo:
 vis.c:
 #  La b�squeda de reglas impl�citas ha sido efectuada.
-#  �ltima modificaci�n 2022-05-15 10:52:32
+#  �ltima modificaci�n 2022-05-15 17:05:02
 #  El archivo ha sido actualizado.
 #  Actualizado con �xito.
 # estad�sticas del conjunto de variables de la tabla de hash:
@@ -292,7 +293,7 @@ vis.c:
 # No es un objetivo:
 makefile:
 #  La b�squeda de reglas impl�citas ha sido efectuada.
-#  �ltima modificaci�n 2022-05-15 10:52:46
+#  �ltima modificaci�n 2022-05-15 17:08:21
 #  El archivo ha sido actualizado.
 #  Actualizado con �xito.
 # estad�sticas del conjunto de variables de la tabla de hash:
@@ -331,7 +332,7 @@ clean:
 
 lab1: lab1.c funciones.o
 #  La b�squeda de reglas impl�citas ha sido efectuada.
-#  �ltima modificaci�n 2022-05-15 10:53:03
+#  �ltima modificaci�n 2022-05-15 17:07:06
 #  El archivo ha sido actualizado.
 #  Actualizado con �xito.
 # estad�sticas del conjunto de variables de la tabla de hash:
@@ -342,7 +343,7 @@ lab1: lab1.c funciones.o
 
 funciones.o: funciones.c funciones.h
 #  La b�squeda de reglas impl�citas ha sido efectuada.
-#  �ltima modificaci�n 2022-05-15 10:53:02
+#  �ltima modificaci�n 2022-05-15 17:07:05
 #  El archivo ha sido actualizado.
 #  Actualizado con �xito.
 # estad�sticas del conjunto de variables de la tabla de hash:
@@ -353,12 +354,11 @@ funciones.o: funciones.c funciones.h
 
 vis: vis.c funciones.o
 #  La b�squeda de reglas impl�citas ha sido efectuada.
-#  �ltima modificaci�n 2022-05-15 10:53:03
+#  �ltima modificaci�n 2022-05-15 17:07:07
 #  El archivo ha sido actualizado.
 #  Actualizado con �xito.
 # estad�sticas del conjunto de variables de la tabla de hash:
-# Carga= 
-0/32=0%, Rehash=0, Colisiones=0/0=0%
+# Carga=0/32=0%, Rehash=0, Colisiones=0/0=0%
 #  comandos para ejecutar (de `makefile', linea 10):
 	gcc -o vis vis.c funciones.o -lm
 	
@@ -376,6 +376,6 @@ vis: vis.c funciones.o
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Se termina la base de datos de Make en Sun May 15 10:53:24 2022
+# Se termina la base de datos de Make en Sun May 15 17:09:14 2022
 
  
