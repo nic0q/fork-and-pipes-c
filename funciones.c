@@ -26,31 +26,6 @@ int getIndexProccess(int nProcesses, int discWidth, float distance){
     }
   }
 }
-
-// Entrada: Dos flotantes, correspondientes a la parte real e imaginaria de una visibilidad
-// Salida: La potencia de una visibilidad
-// Descripcion: Funcion que calcula la potencia de una visibilidad
-float potencia(float r, float i){
-  return sqrt(pow(r, 2) + pow(i, 2));
-}
-
-// Entrada: Dos numeros flotantes
-// Salida: La suma de los dos numeros flotantes de entrada
-// Descripcion: Funcion que calcula la suma de dos flotantes, a largo plazo funcionando
-// para calcular las sumatorias de las distintas propiedades
-float sumatoria(float n1, float n2){
-  return n1 + n2;
-}
-
-// Entrada: Dos numeros flotantes, donde uno es el resultado de una sumatoria y el otro
-// corresponde al N de la sumatoria
-// Salida: Una media (real o imaginaria dependiendo de la primera entrada)
-// Descripcion: Funcion que calcula la media real o media imaginaria dividiendo la sumatoria por
-// el numero de visibilidades involucradas (N)
-float media (float sum, float n){
-  return sum / n;
-}
-
 // Entrada: Un puntero a caracter, correspondiente al nombre del archivo a leer
 // Salida: Un archivo abierto exitosamente
 // Descripcion: Funcion que intenta abrir el archivo, si pudo abrirlo retorna el archivo,
@@ -67,7 +42,6 @@ FILE * leerArchivo(char* nombreArchivo){
     return(archivo);
   }
 }
-
 // Entrada: Un entero, el cual es el numero de discos, un caracter a puntero el cual es el
 // nombre del archivo de salida y un arreglo de arreglos de flontates, que contiene todos 
 // los resultados de los calculos hechos por los hijos en un solo arreglo
