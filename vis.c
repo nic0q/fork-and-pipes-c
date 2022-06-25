@@ -23,7 +23,7 @@ int main(){
       cumPart_r += buffer[0];
       cumPart_i += buffer[1];
       cumNoise += buffer[2];
-      potencia_total = sqrt(pow(buffer[0], 2) + pow(buffer[1], 2));
+      potencia_total += sqrt(pow(buffer[0], 2) + pow(buffer[1], 2));
       n++;
     }
   }
