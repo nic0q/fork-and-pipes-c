@@ -1,4 +1,4 @@
-# Laboratio 1 Sistemas Operativos 2022-1
+# Laboratorio 1 Sistemas Operativos 2022-1
 Este laboratorio consiste en la elaboración de un programa que permite leer un archivo de texto y calcular una serie de propiedades utilizando funciones
 como fork, pipe, execve y dup2, las cuales se guardan en un archivo de texto.<br/>
 * Para una explicación completa revise el [enunciado de laboratorio](https://github.com/nic0q/LAB1-SISTOPE/blob/master/lab1_SO12022.pdf)
