@@ -1,6 +1,0 @@
-make.exe: se ingresa al directorio `c:/Users/nicol/OneDrive - usach.cl/Universidad/Nivel5/SO/Labs/Lab1/Lab1-SISTOPE-REPO'
-gcc -c funciones.c -lm
-gcc -o lab1 lab1.c funciones.o -lm
-gcc -o vis vis.c funciones.o -lm
-make.exe: se sale del directorio `c:/Users/nicol/OneDrive - usach.cl/Universidad/Nivel5/SO/Labs/Lab1/Lab1-SISTOPE-REPO'
- 
