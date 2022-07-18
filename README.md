@@ -3,6 +3,9 @@ Este laboratorio consiste en la elaboración de un programa que permite leer un 
 como fork, pipe, execve y dup2, las cuales se guardan en un archivo de texto.<br/>
 * Para una explicación completa revise el [enunciado de laboratorio](https://github.com/nic0q/LAB1-SISTOPE/blob/master/lab1_SO12022.pdf)
 
+## Evaluación después de la revisión
+* Nota: 6.6 / 7.0
+
 ## Significado Flags:
 - -i: Nombre del archivo de entrada con las visibilidades
 - -o: Nombre del archivo de salida
